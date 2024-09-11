@@ -7,7 +7,6 @@ let meta = {
 let metas = [meta];
 
 const cadastrarMeta = async () => {
-  console.log("chegou");
   const meta = await input({ message: "Digite a meta " });
 
   if (meta.length == 0) {
@@ -36,7 +35,7 @@ const start = async () => {
         },
       ],
     });
-    console.log({ opcao, metas });
+   
     switch (opcao) {
       case "cadastrar":
         await cadastrarMeta();
