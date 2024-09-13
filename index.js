@@ -1,4 +1,4 @@
-const { select, input, checkbox } = require("@inquirer/prompts");
+const { select, input, checkbox} = require("@inquirer/prompts");
 const fs = require("fs").promises
 let mensagem = "Bem vindo ao App de Metas";
 
@@ -30,17 +30,23 @@ const cadastrarMeta = async () => {
 
 
 const listarMetas = async () => {
+  
+  if(metas.length == 0){
+    mensagem = 'Não existem metas!'
+    return
+  }
+  
   const respostas = await checkbox({
     message: 'Use as setas para mudar de meta, o espaço para marcar ou desmarcar e o Enter para finalizar essa etapa ',
     choices: [...metas],
     instructions: false,
 
   })
-
+  console.log('aaaaaaaaa222222') 
   metas.forEach((m) => {
     m.checked = false
   })
-  if(respostas.lenght == 0){
+  if(respostas.length == 0){
     mensagem = 'nenhuma meta selecionada'
     return
   }
@@ -48,12 +54,17 @@ const listarMetas = async () => {
       const meta = metas.find((m) => {
         return m.value == resposta 
       })
-      meta.checked = true 
+      meta.checked = true
+      
   })
   mensagem = 'meta(s) marcada(s) como concluída(s)'
 }
 
 const metasRealizadas = async () => {
+  if(metas.length == 0){
+    mensagem = 'Não existem metas!'
+    return
+  }
   const realizadas = metas.filter((meta) => {
     return meta.checked
   })
@@ -67,31 +78,40 @@ const metasRealizadas = async () => {
   })
 }
 const metasAbertas = async() => {
+  if(metas.length == 0){
+    mensagem = 'Não existem metas!'
+    return
+  }
   const abertas = metas.filter((meta) => {
     return meta.checked != true
   })
-  if(abertas.lenght == 0) {
+  if(abertas.length == 0) {
     mensagem = 'Não existem metas abertas'
     return
   }
 
   await select({
-    message: "Metas Abertas: " + abertas.lenght,
+    message: "Metas Abertas: " + abertas.length,
     choices: [...abertas]
   })
 }
 
 const deletarMetas = async () => {
+  if(metas.length == 0){
+    mensagem = 'Não existem metas!'
+    return
+  }
   const metasDesmarcadas = metas.map((meta) => {
     return {value: meta.value, checked: false}
   })
   const itemADeletar = await checkbox({
+    
       message: 'Selecione item para deletar',
       choices: [...metasDesmarcadas],
       instructions: false,
   
     })
-    if(itemADeletar.lenght == 0) {
+    if(itemADeletar.length == 0) {
       mensagem ='Nenhum item para deletar'
       return
     }
